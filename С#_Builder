@@ -1,0 +1,146 @@
+/*
+ * Создано в SharpDevelop.
+ * Пользователь: Student
+ * Дата: 12.11.2019
+ * Время: 18:31
+ * 
+ * Для изменения этого шаблона используйте меню "Инструменты | Параметры | Кодирование | Стандартные заголовки".
+ */
+using System;
+
+using System.Collections.Generic;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+
+namespace Pattern_Fab_Buld
+{
+//мука
+class Flour
+{
+    // какого сорта мука
+    public string Sort { get; set; }
+}
+
+public interface ISalt
+{
+    void beSalt();
+}
+
+// соль
+class Salt:ISalt
+{
+    public void beSalt()
+    {
+    }
+}
+// пищевые добавки
+class Additives:ISalt
+{
+#region ISalt implementation
+
+public void beSalt()
+{
+    
+}
+
+#endregion
+
+    
+    public void getSalt()
+    {
+        
+    }
+    
+    public string Name { get; set; }
+}
+ 
+class Bread
+{
+    // мука
+    public Flour Flour { get; set; }
+    // соль
+    public Salt Salt { get; set; }
+    // пищевые добавки
+    public Additives Additives { get; set; }
+    public override string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+ 
+        if (Flour != null)
+            sb.Append(Flour.Sort + "\n");
+        if (Salt != null)
+            sb.Append("Соль \n");
+        if (Additives != null)
+            sb.Append("Добавки: "+Additives.Name+", "+Additives.getSalt()+" \n");
+        return sb.ToString();
+    }
+}
+// абстрактный класс строителя
+abstract class BreadBuilder
+{
+    public Bread Bread { get; private set; }
+    public void CreateBread()
+    {
+        Bread = new Bread();
+    }
+    public abstract void SetFlour();
+    public abstract void SetSalt();
+    public abstract void SetAdditives();
+}
+// пекарь
+class Baker
+{
+    public Bread Bake(BreadBuilder breadBuilder)
+    {
+        breadBuilder.CreateBread();
+        breadBuilder.SetFlour();
+        breadBuilder.SetSalt();
+        breadBuilder.SetAdditives();
+        return breadBuilder.Bread;
+    }
+}
+// строитель для ржаного хлеба
+class RyeBreadBuilder : BreadBuilder
+{
+    public override void SetFlour()
+    {
+        this.Bread.Flour = new Flour { Sort = "Ржаная мука 1 сорт" };
+    }
+ 
+    public override void SetSalt()
+    {
+        this.Bread.Salt = new Salt();
+    }
+ 
+    public override void SetAdditives()
+    {
+        // не используется
+    }
+}
+// строитель для пшеничного хлеба
+class WheatBreadBuilder : BreadBuilder
+{
+    public override void SetFlour()
+    {
+        this.Bread.Flour = new Flour { Sort = "Пшеничная мука высший сорт" };
+    }
+ 
+    public override void SetSalt()
+    {
+        this.Bread.Salt = new Salt();
+    }
+ 
+    public override void SetAdditives()
+    {
+        this.Bread.Additives = new Additives { Name = "улучшитель хлебопекарный" };
+    }
+}
+class AdditivesFactory
+{
+    public override void  SetAdditives()
+    {
+        this.Bread.Additives new Additives {Name = "степень солёности"};
+    }
+}
+}   
